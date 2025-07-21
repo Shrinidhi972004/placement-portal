@@ -1,0 +1,9 @@
+.edit-profile-container {
+  max-width: 500px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 2rem 2.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 24px rgba(60,40,100,0.09);
+}
+

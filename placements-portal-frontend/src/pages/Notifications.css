@@ -1,0 +1,30 @@
+.notifications-container {
+  max-width: 600px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 2rem 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 24px rgba(60,40,100,0.09);
+}
+.notifications-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #232946;
+}
+.notifications-list {
+  list-style: none;
+  padding: 0;
+}
+.notification-card {
+  background: #f6f6f8;
+  margin-bottom: 1.1rem;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  color: #393a59;
+  box-shadow: 0 1px 5px rgba(80,80,100,0.05);
+}
+.notification-card.new {
+  border-left: 5px solid #ffb400;
+  background: #fffbe6;
+}
+
