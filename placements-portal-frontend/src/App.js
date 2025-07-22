@@ -14,6 +14,10 @@ import EditProfile from "./pages/EditProfile";
 import DriveForm from "./pages/DriveForm";
 import NotFound from "./pages/NotFound";
 
+function getRole() {
+  return localStorage.getItem("role");
+}
+
 function App() {
   // User state for login persistence
   const [user, setUser] = useState(null);
@@ -23,6 +27,14 @@ function App() {
     const savedUser = localStorage.getItem("user");
     if (savedUser) setUser(JSON.parse(savedUser));
   }, []);
+
+  // Protected route wrappers
+  function OfficerRoute({ children }) {
+    return getRole() === "OFFICER" ? children : <Navigate to="/login" />;
+  }
+  function StudentRoute({ children }) {
+    return getRole() === "STUDENT" ? children : <Navigate to="/login" />;
+  }
 
   return (
     <Router>
@@ -37,21 +49,17 @@ function App() {
         <Route
           path="/student/dashboard"
           element={
-            user && user.role === "STUDENT" ? (
+            <StudentRoute>
               <StudentDashboard user={user} />
-            ) : (
-              <Navigate to="/login" />
-            )
+            </StudentRoute>
           }
         />
         <Route
           path="/student/drives"
           element={
-            user && user.role === "STUDENT" ? (
+            <StudentRoute>
               <Drives user={user} />
-            ) : (
-              <Navigate to="/login" />
-            )
+            </StudentRoute>
           }
         />
         <Route
@@ -65,21 +73,17 @@ function App() {
         <Route
           path="/officer/dashboard"
           element={
-            user && user.role === "OFFICER" ? (
+            <OfficerRoute>
               <OfficerDashboard user={user} />
-            ) : (
-              <Navigate to="/login" />
-            )
+            </OfficerRoute>
           }
         />
         <Route
           path="/officer/drive-form"
           element={
-            user && user.role === "OFFICER" ? (
+            <OfficerRoute>
               <DriveForm user={user} />
-            ) : (
-              <Navigate to="/login" />
-            )
+            </OfficerRoute>
           }
         />
 

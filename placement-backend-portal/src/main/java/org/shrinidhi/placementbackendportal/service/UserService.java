@@ -29,7 +29,16 @@ public class UserService {
             student.setEmail(dto.getEmail());
             student.setPassword(passwordEncoder.encode(dto.getPassword()));
             student.setCgpa(dto.getCgpa());
-            student.setSkills(dto.getSkills());
+            // Convert skills string to List<String>
+            if (dto.getSkills() != null && !dto.getSkills().isEmpty()) {
+                java.util.List<String> skillsList = java.util.Arrays.stream(dto.getSkills().split(","))
+                    .map(String::trim)
+                    .filter(s -> !s.isEmpty())
+                    .toList();
+                student.setSkills(skillsList);
+            } else {
+                student.setSkills(new java.util.ArrayList<>());
+            }
             return userRepository.save(student);
         } else if ("OFFICER".equalsIgnoreCase(dto.getRole())) {
             Officer officer = new Officer();

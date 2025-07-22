@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 import "./Login.css";
 
 function Login({ setUser: setAppUser }) {
@@ -20,16 +21,20 @@ function Login({ setUser: setAppUser }) {
         email,
         password,
       });
-      if (res.data) {
-        setUser(res.data);
-        setError("");
-        // Save to localStorage for persistent login
-        localStorage.setItem("user", JSON.stringify(res.data));
-        // Also update user state in parent App if provided
-        if (setAppUser) setAppUser(res.data);
+      if (res.data && res.data.token) {
+        // Decode JWT to get role and user info
+        const decoded = jwt_decode(res.data.token);
+        const role = decoded.role;
+        // Save token, role, and decoded user info to localStorage
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("role", role);
+        localStorage.setItem("userInfo", JSON.stringify(decoded));
+        // Save user info (optional, for compatibility)
+        setUser({ ...res.data, role });
+        if (setAppUser) setAppUser({ ...res.data, role });
         // Redirect based on role
-        if (res.data.role === "STUDENT") navigate("/student/dashboard");
-        else if (res.data.role === "OFFICER") navigate("/officer/dashboard");
+        if (role === "STUDENT") navigate("/student/dashboard");
+        else if (role === "OFFICER") navigate("/officer/dashboard");
       } else {
         setError("Invalid credentials.");
       }
